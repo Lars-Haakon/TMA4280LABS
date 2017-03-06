@@ -25,4 +25,4 @@ riemann.o: riemann.c riemann.h
 	${CC} -c riemann.c
 	
 clean:
-	-rm -f zeta0 utest vtest verification.txt *.o
+	-rm -f zeta0 utest vtest *.txt *.o

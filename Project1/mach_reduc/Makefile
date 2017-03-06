@@ -19,4 +19,4 @@ machin.o: machin.c machin.h
 	${CC} -c machin.c
 	
 clean:
-	-rm -f mach test test.txt *.o
+	-rm -f mach test *.txt *.o

@@ -25,4 +25,4 @@ machin.o: machin.c machin.h
 	${CC} -c machin.c
 	
 clean:
-	-rm -f mach0 utest vtest verification.txt *.o
+	-rm -f mach0 utest vtest *.txt *.o

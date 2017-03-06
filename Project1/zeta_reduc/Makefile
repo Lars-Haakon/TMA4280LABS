@@ -19,4 +19,4 @@ riemann.o: riemann.c riemann.h
 	${CC} -c riemann.c
 	
 clean:
-	-rm -f zeta test test.txt *.o
+	-rm -f zeta test *.txt *.o

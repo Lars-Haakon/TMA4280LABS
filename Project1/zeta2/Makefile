@@ -20,4 +20,4 @@ riemann.o: riemann.c riemann.h
 	${CC} -c riemann.c ${CFLAGS}
 	
 clean:
-	-rm -f zeta2 test test.txt *.o
+	-rm -f zeta2 test *.txt *.o
