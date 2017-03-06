@@ -14,7 +14,7 @@ double walltime() {
 int main ( int argc, char **argv ) {
 	double pi_expected = 3.1415926535897932;
 	
-	FILE* f = fopen("verification.txt", "w");
+	FILE* f = fopen("test.txt", "w");
 	
 	for(int k = 1; k <= 24; k++) {
 		int n = 2 << (k-1);
