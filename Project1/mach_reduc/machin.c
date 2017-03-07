@@ -30,25 +30,26 @@ double arctan(double x, int n) {
 	for(int i = 0; i < n/comm_sz; i++) {
 		partial_sum += local_vector[i];
 	}
+	free(local_vector);
 	
 	double sum = 0;
-	//MPI_Allreduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+	MPI_Allreduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 	
 	// Recursive doubling sum
-	int power = 1;
+	/*int power = 1;
 	for(int d = 0; d < log2(comm_sz); d++) {
 		
 		int sigma = my_rank ^ power;
 
-		double recv_sum;
+		double received_sum;
 		MPI_Send(&partial_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD);
-		MPI_Recv(&recv_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Recv(&received_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-		sum += recv_sum;
+		partial_sum += received_sum;
 		
 		power = 2 << d;
 	}
-	sum += partial_sum;
+	sum = partial_sum;*/
 	
 	if(my_rank == 0) {
 		free(partial_sums);

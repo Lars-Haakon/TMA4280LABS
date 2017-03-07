@@ -7,7 +7,7 @@ run: zeta1
 	mpirun -n 2 ./zeta1
 	
 test: test0
-	mpirun -n 2 ./test
+	mpirun -n 8 ./test
 
 zeta1: zeta1.c riemann.o
 	${CC} zeta1.c -o zeta1 riemann.o ${LDFLAGS}

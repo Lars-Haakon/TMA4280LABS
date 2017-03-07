@@ -29,15 +29,15 @@ int main(int argc, char **argv) {
 		MPI_Recv(&n, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	}
 	
+	MPI_Barrier(MPI_COMM_WORLD);
 	double start = MPI_Wtime();
 	
 	double pi_computed = riemann(n);
 
 	if(my_rank == 0) {
 		double finish = MPI_Wtime();
-		double pi_expected = 3.1415926535897932;
 		
-		printf("pi_error: %.20f\nElapsed time: %e seconds\n", fabs(pi_expected-pi_computed), finish-start);
+		printf("pi_error: %.20f\nElapsed time: %e seconds\n", fabs(M_PI-pi_computed), finish-start);
 	}
 	
 	MPI_Finalize();

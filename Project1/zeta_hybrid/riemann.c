@@ -23,7 +23,7 @@ double riemann(int n) {
 #pragma omp parallel for
 		for(int i = 1; i <= n; i++) {
 			//printf("Iteration: %d, Thread: %d of %d\n", i, omp_get_thread_num(), omp_get_num_threads());
-			global_vector[i-1] = 1.0/(i*i);
+			global_vector[i-1] = 1/pow(i, 2);
 		}
 	}
 	local_vector = malloc((n/comm_sz)*sizeof(double));
@@ -35,6 +35,8 @@ double riemann(int n) {
 	for(int i = 0; i < n/comm_sz; i++) {
 		partial_sum += local_vector[i];
 	}
+	
+	free(local_vector);
 	
 	MPI_Gather(&partial_sum, 1, MPI_DOUBLE, partial_sums, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
@@ -50,8 +52,6 @@ double riemann(int n) {
 		
 		return sqrt(6*sum);
 	}
-	
-	free(local_vector);
 	
 	return 0;
 }

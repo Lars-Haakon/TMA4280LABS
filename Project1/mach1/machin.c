@@ -30,6 +30,7 @@ double arctan(double x, int n) {
 	for(int i = 0; i < n/comm_sz; i++) {
 		partial_sum += local_vector[i];
 	}
+	free(local_vector);
 	
 	MPI_Gather(&partial_sum, 1, MPI_DOUBLE, partial_sums, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
@@ -38,6 +39,8 @@ double arctan(double x, int n) {
 		for(int i = 0; i < comm_sz; i++) {
 			sum += partial_sums[i];
 		}
+		free(partial_sums);
+		free(global_vector);
 		
 		return sum;
 	}

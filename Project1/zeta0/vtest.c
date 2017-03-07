@@ -5,7 +5,6 @@
 #include "riemann.h"
 
 int main ( int argc, char **argv ) {
-	double pi_expected = 3.1415926535897932;
 	
 	FILE* f = fopen("test.txt", "w");
 	
@@ -14,7 +13,7 @@ int main ( int argc, char **argv ) {
 		
 		double pi_computed = riemann(n);
 		
-		fprintf(f, "%d %.20f %.20f\n", k, pi_computed, fabs(pi_expected-pi_computed));
+		fprintf(f, "%d %.20f %.20f\n", k, pi_computed, fabs(M_PI-pi_computed));
 	}
 	
 	fclose(f);

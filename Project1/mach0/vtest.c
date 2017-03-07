@@ -12,8 +12,6 @@ double walltime() {
 }
 
 int main ( int argc, char **argv ) {
-	double pi_expected = 3.1415926535897932;
-	
 	FILE* f = fopen("test.txt", "w");
 	
 	for(int k = 1; k <= 24; k++) {
@@ -23,7 +21,7 @@ int main ( int argc, char **argv ) {
 		double pi_computed = machin(n);
 		double finish = walltime();
 		
-		fprintf(f, "Elapsed time: %e seconds\n%d %.20f %.20f\n", finish-start, k, pi_computed, fabs(pi_expected-pi_computed));
+		fprintf(f, "Elapsed time: %e seconds\n%d %.20f %.20f\n", finish-start, k, pi_computed, fabs(M_PI-pi_computed));
 	}
 	
 	fclose(f);

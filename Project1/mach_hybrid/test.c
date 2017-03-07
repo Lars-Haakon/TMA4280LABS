@@ -23,15 +23,15 @@ int main(int argc, char **argv) {
 	for(int k = 3; k <= 24; k++) {
 		int n = 2 << (k-1);
 		
+		MPI_Barrier(MPI_COMM_WORLD);
 		double start = MPI_Wtime();
 		
 		double pi_computed = machin(n);
 		
 		if(my_rank == 0) {
 			double finish = MPI_Wtime();
-			double pi_expected = 3.1415926535897932;
 			
-			fprintf(f, "Elapsed time: %e seconds\n%d %.20f %.20f\n", finish-start, k, pi_computed, fabs(pi_expected-pi_computed));
+			fprintf(f, "Elapsed time: %e seconds\n%d %.20f %.20f\n", finish-start, k, pi_computed, fabs(M_PI-pi_computed));
 		}
 	}
 	
