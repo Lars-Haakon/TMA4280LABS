@@ -30,7 +30,7 @@ int main ( int argc, char **argv ) {
 		double finish = walltime();
 		
 		fprintf(f, "%d %e %.15f\n", k, finish-start, fabs(M_PI-pi_computed));
-		sleep(1);
+		//sleep(1);
 	}
 	
 	fclose(f);
