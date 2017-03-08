@@ -12,7 +12,7 @@ double *partial_sums;
 
 extern int my_rank, comm_sz;
 
-double arctan(double x, int n) {
+double arctan(double x, int n, Method method) {
 	if(my_rank == 0) {
 		global_vector = malloc(n*sizeof(double));
 		partial_sums = malloc(comm_sz*sizeof(double));
@@ -33,23 +33,25 @@ double arctan(double x, int n) {
 	free(local_vector);
 	
 	double sum = 0;
-	MPI_Allreduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-	
-	// Recursive doubling sum
-	/*int power = 1;
-	for(int d = 0; d < log2(comm_sz); d++) {
-		
-		int sigma = my_rank ^ power;
+	if(method == ALLREDUCE) {
+		MPI_Allreduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+	} else if(method == RECURSIVEDOUBLE) {
+		// Recursive doubling sum
+		int power = 1;
+		for(int d = 0; d < log2(comm_sz); d++) {
+			
+			int sigma = my_rank ^ power;
 
-		double received_sum;
-		MPI_Send(&partial_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD);
-		MPI_Recv(&received_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			double received_sum;
+			MPI_Send(&partial_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD);
+			MPI_Recv(&received_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-		partial_sum += received_sum;
-		
-		power = 2 << d;
+			partial_sum += received_sum;
+			
+			power = 2 << d;
+		}
+		sum = partial_sum;
 	}
-	sum = partial_sum;*/
 	
 	if(my_rank == 0) {
 		free(partial_sums);
@@ -59,7 +61,7 @@ double arctan(double x, int n) {
 	return sum;
 }
 
-double machin(int n) {
+double machin(int n, Method method) {
 	
-	return 4*(4*arctan(1.0/5, n) - arctan(1.0/239, n));
+	return 4*(4*arctan(1.0/5, n, method) - arctan(1.0/239, n, method));
 }

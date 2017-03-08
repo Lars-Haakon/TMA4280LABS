@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <sys/time.h>
+#include <unistd.h>
+#include <omp.h>
 
 #include "machin.h"
 
@@ -12,6 +14,12 @@ double walltime() {
 }
 
 int main ( int argc, char **argv ) {
+	
+	int p;
+	printf("How many threads should be run? ");
+	scanf("%d", &p);
+	omp_set_num_threads(p);
+	
 	FILE* f = fopen("test.txt", "w");
 	
 	for(int k = 1; k <= 24; k++) {
@@ -21,7 +29,8 @@ int main ( int argc, char **argv ) {
 		double pi_computed = machin(n);
 		double finish = walltime();
 		
-		fprintf(f, "Elapsed time: %e seconds\n%d %.20f %.20f\n", finish-start, k, pi_computed, fabs(M_PI-pi_computed));
+		fprintf(f, "%d %e %.15f\n", k, finish-start, fabs(M_PI-pi_computed));
+		sleep(1);
 	}
 	
 	fclose(f);

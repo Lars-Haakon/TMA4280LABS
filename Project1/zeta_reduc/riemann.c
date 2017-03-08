@@ -12,7 +12,7 @@ double *partial_sums;
 
 extern int my_rank, comm_sz;
 
-double riemann(int n) {
+double riemann(int n, Method method) {
 	
 	if(my_rank == 0) {
 		global_vector = malloc(n*sizeof(double));
@@ -34,23 +34,25 @@ double riemann(int n) {
 	free(local_vector);
 	
 	double sum = 0;
-	MPI_Allreduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-	
-	// Recursive doubling sum
-	/*int power = 1;
-	for(int d = 0; d < log2(comm_sz); d++) {
-		
-		int sigma = my_rank ^ power;
+	if(method == ALLREDUCE) {
+		MPI_Allreduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+	} else if(method == RECURSIVEDOUBLE) {
+		// Recursive doubling sum
+		int power = 1;
+		for(int d = 0; d < log2(comm_sz); d++) {
+			
+			int sigma = my_rank ^ power;
 
-		double received_sum;
-		MPI_Send(&partial_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD);
-		MPI_Recv(&received_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			double received_sum;
+			MPI_Send(&partial_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD);
+			MPI_Recv(&received_sum, 1, MPI_DOUBLE, sigma, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-		partial_sum += received_sum;
-		
-		power = 2 << d;
+			partial_sum += received_sum;
+			
+			power = 2 << d;
+		}
+		sum = partial_sum;
 	}
-	sum = partial_sum;*/
 	
 	if(my_rank == 0) {
 		free(partial_sums);

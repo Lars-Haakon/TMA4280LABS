@@ -6,6 +6,8 @@
 
 int main ( int argc, char **argv ){
     
+	//omp_set_num_threads(2);
+	
     int n;
 	printf("Enter a value : ");
 	scanf("%d", &n);

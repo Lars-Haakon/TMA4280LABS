@@ -7,7 +7,7 @@ run: mach1
 	mpirun -n 8 ./mach1
 	
 test: test0
-	mpirun -n 8 ./test
+	mpirun -n 2 ./test
 
 mach1: mach1.c machin.o
 	${CC} mach1.c -o mach1 machin.o ${LDFLAGS}

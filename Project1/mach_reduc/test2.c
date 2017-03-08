@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 		MPI_Barrier(MPI_COMM_WORLD);
 		double start = MPI_Wtime();
 		
-		double pi_computed = machin(n);
+		double pi_computed = machin(n, RECURSIVEDOUBLE);
 		
 		if(my_rank == 0) {
 			double finish = MPI_Wtime();

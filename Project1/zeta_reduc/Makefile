@@ -6,17 +6,23 @@ all: run
 run: zeta
 	mpirun -n 2 ./zeta
 	
-test: test0
-	mpirun -n 8 ./test
+test1: test-a
+	mpirun -n 8 ./test1
+	
+test2: test-r
+	mpirun -n 8 ./test2
 
 zeta: zeta.c riemann.o
 	${CC} zeta.c -o zeta riemann.o ${LDFLAGS}
 
-test0: test.c riemann.o
-	${CC} test.c -o test riemann.o ${LDFLAGS}
+test-a: test1.c riemann.o
+	${CC} test1.c -o test1 riemann.o ${LDFLAGS}
+
+test-r: test2.c riemann.o
+	${CC} test2.c -o test2 riemann.o ${LDFLAGS}
 	
 riemann.o: riemann.c riemann.h
 	${CC} -c riemann.c
 	
 clean:
-	-rm -f zeta test *.txt *.o
+	-rm -f zeta test1 test2 *.txt *.o

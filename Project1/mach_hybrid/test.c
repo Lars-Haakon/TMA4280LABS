@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 		if(my_rank == 0) {
 			double finish = MPI_Wtime();
 			
-			fprintf(f, "Elapsed time: %e seconds\n%d %.20f %.20f\n", finish-start, k, pi_computed, fabs(M_PI-pi_computed));
+			fprintf(f, "%d %e %.15f\n", k, finish-start, fabs(M_PI-pi_computed));
 		}
 	}
 	
