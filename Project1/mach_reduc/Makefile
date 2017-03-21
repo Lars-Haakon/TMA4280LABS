@@ -4,7 +4,7 @@ LDFLAGS += -lm
 all: run
 
 run: mach
-	mpirun -n 8 ./mach
+	mpirun -n 2 ./mach
 	
 test1: test-a
 	mpirun -n 8 ./test1
