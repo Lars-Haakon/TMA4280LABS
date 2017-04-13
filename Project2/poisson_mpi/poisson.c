@@ -54,8 +54,10 @@ int main(int argc, char **argv)
 	
 	double start;
 
-	if(rank==0)
+	if(rank==0) {
+		printf("number of processes: %d\n", size);
 		start = MPI_Wtime();
+	}
 
     /*
      *  The equation is solved on a 2D structured grid and homogeneous Dirichlet
