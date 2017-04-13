@@ -6,4 +6,4 @@
 *.o
 *.txt
 !*CMakeLists.txt
-*builc/*
+*build/*
