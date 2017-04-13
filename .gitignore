@@ -1,9 +1,9 @@
 *
 !*/
-*build/
 !*.*
 !Makefile
 
 *.o
 *.txt
 !*CMakeLists.txt
+*builc/*
