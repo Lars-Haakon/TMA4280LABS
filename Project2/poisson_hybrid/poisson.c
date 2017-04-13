@@ -74,8 +74,10 @@ int main(int argc, char **argv)
     int m = n/size;
     real h = 1.0 / n;
 
+	MPI_Barrier(MPI_COMM_WORLD);
 	double start;
 	if(rank==0) {
+		printf("number of processes: %d\n", size);
 		start = MPI_Wtime();
 	}
 	
@@ -196,6 +198,7 @@ int main(int argc, char **argv)
         fstinv_(b[i], &n, z, &nn);
     }
 	
+	MPI_Barrier(MPI_COMM_WORLD);
 	if(rank == 0) {
 		double finish = MPI_Wtime();
 		

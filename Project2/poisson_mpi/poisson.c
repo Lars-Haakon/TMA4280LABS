@@ -51,13 +51,6 @@ int main(int argc, char **argv)
         printf("Arguments:\n");
         printf("  n: the problem size (must be a power of 2)\n");
     }
-	
-	double start;
-
-	if(rank==0) {
-		printf("number of processes: %d\n", size);
-		start = MPI_Wtime();
-	}
 
     /*
      *  The equation is solved on a 2D structured grid and homogeneous Dirichlet
@@ -69,6 +62,20 @@ int main(int argc, char **argv)
     int n = atoi(argv[1]);
     int m = n/size;
     real h = 1.0 / n;
+	
+	if((n & (n - 1)) != 0 || (size & (size - 1)) != 0) {
+		if(rank==0) {
+			printf("both problem size and number of MPI procs has to be a power of 2\n");
+		}
+		exit(-1);
+	}
+	
+	MPI_Barrier(MPI_COMM_WORLD);
+	double start;
+	if(rank==0) {
+		printf("number of processes: %d\n", size);
+		start = MPI_Wtime();
+	}
 
 	MPI_Datatype col, coltype;
 	MPI_Type_vector(m, 1, n, MPI_DOUBLE, &col);       
@@ -183,6 +190,7 @@ int main(int argc, char **argv)
         fstinv_(b[i], &n, z, &nn);
     }
 	
+	MPI_Barrier(MPI_COMM_WORLD);
 	if(rank == 0) {
 		double finish = MPI_Wtime();
 		
