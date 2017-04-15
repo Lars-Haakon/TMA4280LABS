@@ -1,7 +1,7 @@
 *
 !*/
 !*.*
-!Makefile
+!jobs/*
 
 *.o
 *.txt
