@@ -155,12 +155,11 @@ int main(int argc, char **argv)
         fstinv_(b[i], &n, z, &nn);
     }
 	
-	//export_plot_data(m, grid, b);
-	
 	double finish = walltime();
 		
 	printf("Elapsed time: %e\n", finish-start);
 	
+	export_plot_data(m, grid, b);
     /*
      * Compute maximal value of solution for convergence analysis in L_\infty
      * norm.

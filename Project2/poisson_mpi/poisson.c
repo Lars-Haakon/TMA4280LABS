@@ -30,7 +30,7 @@ real **mk_2D_array(size_t n1, size_t n2, bool zero);
 void transpose(real **bt, real** b2, size_t m, size_t n);
 real rhs(real x, real y);
 real exact_solution(real x, real y);
-void export_plot_data(int m, real *grid, real **b);
+void export_plot_data(int n, int m, real *grid, real **b);
 void print_matrix(real** b, size_t m, size_t n);
 
 // Functions implemented in FORTRAN in fst.f and called from C.
@@ -197,6 +197,8 @@ int main(int argc, char **argv)
 		printf("Elapsed time: %e seconds\n", finish-start);
 	}
 	
+	export_plot_data(n, m, grid, b);
+	
     /*
      * Compute maximal value of solution for convergence analysis in L_\infty
      * norm.
@@ -257,16 +259,27 @@ real exact_solution(real x, real y) {
 	return sin(PI*x)*sin(2*PI*y);
 }
 
-void export_plot_data(int m, real *grid, real **b) {
-	FILE* f = fopen("plotdata.txt", "w");
-
-	fprintf(f, "%d\n", m);
-	for(int i = 0; i < m; i++) {
-		fprintf(f, "%.15f\n", grid[i+1]);
+void export_plot_data(int n, int m, real *grid, real **b) {
+	if(rank!=0) {
+		int r;
+		MPI_Recv(&r, 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	} else {
+		FILE* f0 = fopen("plotdata.txt", "w");
+		fprintf(f0, "%d\n", n-1);
+		for(int i = 0; i < n-1; i++) {
+			fprintf(f0, "%.15f\n", grid[i+1]);
+		}
+		
+		fclose(f0);
 	}
 	
+	FILE* f = fopen("plotdata.txt", "a");
+	
+	if(rank==size-1)
+		m--;
+	
 	for (size_t i = 0; i < m; i++) {
-        for (size_t j = 0; j < m; j++) {
+        for (size_t j = 0; j < n-1; j++) {
 			
 			fprintf(f, "%.15f ", b[i][j]);
 		}
@@ -274,6 +287,12 @@ void export_plot_data(int m, real *grid, real **b) {
 	}
 	
 	fclose(f);
+	
+	if(rank != size-1) {
+		sleep(1);
+		int s = 0;
+		MPI_Send(&s, 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
+	}
 }
 
 /*
