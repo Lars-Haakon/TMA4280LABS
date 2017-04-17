@@ -1,9 +1,12 @@
 *
 !*/
 !*.*
-!Makefile
+!s*
+!m*
+!h*
 
 *.o
 *.txt
 !*CMakeLists.txt
 build/
+Project1/
