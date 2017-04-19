@@ -140,7 +140,8 @@ int main(int argc, char **argv)
      * reallocations at each function call.
      */
     int nn = 4 * n;
-    real *z = mk_1D_array(nn, false);
+    //real *z = mk_1D_array(nn, false);
+	real z[nn];
 
     /*
      * Initialize the right hand side data for a given rhs function.
@@ -165,12 +166,14 @@ int main(int argc, char **argv)
      * In functions fst_ and fst_inv_ coefficients are written back to the input 
      * array (first argument) so that the initial values are overwritten.
      */
+#pragma omp parallel for private(nn, z) num_threads(t)
     for (size_t i = 0; i < m; i++) {
         fst_(b[i], &n, z, &nn);
     }
 	
 	MPI_Alltoallv(&(b[0][0]), scount, sdisp, coltype, &(b2[0][0]), rcount, rdisp, MPI_DOUBLE, MPI_COMM_WORLD);
 	transpose(bt, b2, m, n, t);
+#pragma omp parallel for private(z, nn) num_threads(t)
     for (size_t i = 0; i < m; i++) {
         fstinv_(bt[i], &n, z, &nn);
     }
@@ -188,11 +191,13 @@ int main(int argc, char **argv)
     /*
      * Compute U = S^-1 * (S * Utilde^T) (Chapter 9. page 101 step 3)
      */
+#pragma omp parallel for private(z, nn) num_threads(t)
     for (size_t i = 0; i < m; i++) {
         fst_(bt[i], &n, z, &nn);
     }
 	MPI_Alltoallv(&(bt[0][0]), scount, sdisp, coltype, &(b2[0][0]), rcount, rdisp, MPI_DOUBLE, MPI_COMM_WORLD);
 	transpose(b, b2, m, n, t);
+#pragma omp parallel for private(z, nn) num_threads(t)
     for (size_t i = 0; i < m; i++) {
         fstinv_(b[i], &n, z, &nn);
     }

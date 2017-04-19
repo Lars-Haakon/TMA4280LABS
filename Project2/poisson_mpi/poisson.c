@@ -250,8 +250,8 @@ void print_matrix(real** b, size_t m, size_t n) {
 
 real rhs(real x, real y) {
     //return 2 * (y - y*y + x - x*x);
-	return 5*PI*PI*sin(PI*x)*sin(2*PI*y);
-	//return exp(x)*sin(2*PI*x)*sin(2*PI*y);
+	//return 5*PI*PI*sin(PI*x)*sin(2*PI*y);
+	return exp(x)*sin(2*PI*x)*sin(2*PI*y);
 	//return 1;
 }
 
